@@ -35,8 +35,21 @@
 
     {% if page.mermaid %}
     <script type="module">
-      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-      mermaid.initialize({ startOnLoad: true, theme: 'default', securityLevel: 'loose' });
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+
+      // This part is crucial because Jekyll creates <code class="language-mermaid">
+      // but Mermaid looks for <div class="mermaid">
+      document.addEventListener('DOMContentLoaded', function () {
+        const blocks = document.querySelectorAll('pre code.language-mermaid');
+        blocks.forEach(block => {
+          const div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = block.textContent;
+          block.parentElement.replaceWith(div);
+        });
+        mermaid.init(undefined, '.mermaid');
+      });
     </script>
     {% endif %}
   </body>
