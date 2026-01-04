@@ -1,7 +1,3 @@
----
-layout: default
-title: My Page Title
----
 
 
 # SmartShelf API Documentation (Third‑Party Integration)
