@@ -10,6 +10,12 @@ nav_links:
     url: /index.html
   - title: Integration
     url: /integration/index.html
+  - title: About us
+    url: /aboutus/index.html
+    children:
+      - title: Contact Us
+        url: /contactus/contact.html
+  -
 ---
 nav_links:
 # site-wide navigation used by the layout
@@ -22,4 +28,5 @@ theme: minima
 url: ""           # set to site URL for production, e.g. https://example.com
 baseurl: ""       # change if served from a subpath
 description: "Documentation for the Zoom Market grocery application"
+
 
