@@ -1,6 +1,12 @@
 
 
 # SmartShelf API Documentation (Third‑Party Integration)
+---
+layout: post
+title: "My Diagram Page"
+mermaid: true
+---
+
 
 This document contains integration guides for the public APIs exposed by **SmartShelf**  online application. Each document includes endpoint details, required headers, sample requests (curl), example responses, and integration notes.
 
