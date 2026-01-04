@@ -3,13 +3,13 @@ layout: default
 title: My Page Title
 ---
 
-### Receive Orders
+## Receive Orders
 
 ### Purpose
-Poll RetailProcessor for new or updated orders. Designed for reliable third‑party synchronization.
+Poll **SmartShelf** online application for submitted orders. Designed for reliable third‑party synchronization.
 
 ### Endpoint
-- GET /api/external/receiveOrders  
+- **GET** /api/external/receiveOrders  
 - Accept: application/json
 
 ### Authentication & headers
@@ -233,7 +233,6 @@ curl -v -X GET "https://api.example.com/api/external/receiveOrders?since=2025-11
 
 ### Errors
 
-<!-- blank line ensured before table -->
 | HTTP | Reason |
 |---:|---|
 | 400 | Malformed parameter (e.g., timestamp) |
@@ -242,12 +241,3 @@ curl -v -X GET "https://api.example.com/api/external/receiveOrders?since=2025-11
 | 429 | Rate limit exceeded |
 | 500 | Server error |
 
-<!-- blank line ensured after table -->
-
-### Integration notes
-- Use `since` for incremental polling and deduplicate by `orderNo + version`.
-- Implement exponential backoff on 429 responses.
-- Validate nested arrays and handle partial/nullable fields gracefully.
-
-### Angular tip
-- Use HttpClient and typed models; for polling consider RxJS operators (interval, retryWhen).

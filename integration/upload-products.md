@@ -3,13 +3,13 @@ layout: default
 title: My Page Title
 ---
 
-### Upload Products
+## Upload Products
 
 ### Purpose
-Accept a product data file (CSV or JSON). Optionally include related images in the same multipart request.
+Accept a product data file (CSV or JSON) and uploads products to **SmartShelf** online application 
 
 ### Endpoint
-- POST /api/external/uploadProducts  
+- **POST** /api/external/uploadProducts  
 - Content-Type: multipart/form-data
 
 ### Authentication & headers
@@ -22,10 +22,13 @@ Accept a product data file (CSV or JSON). Optionally include related images in t
 
 ### Form fields
 
-| Field | Required | Type    | Description                |
-|---|:--------:|---------|----------------------------|
-| datafile |   Yes    | file    | Product data (CSV or JSON) |
-| deleteAll |   Yes    | boolean | true/false                 |
+| Field | Required | Type    | Description                 |
+|---|:--------:|---------|-----------------------------|
+| datafile |   Yes    | MultipartFile | Product data (CSV or JSON)  |
+| deleteAll |   Yes    | boolean | true/false                  |
+
+- Download template: [mst_product-template.csv](./mst_product-template.csv)
+
 
 ### Sample curl — CSV only
 ```bash
@@ -34,14 +37,6 @@ curl -v -X POST "https://api.example.com/api/external/uploadProducts" \
   -H "key: ENCRYPTED_COMPANY_KEY" \
   -F "datafile=@/path/to/products.csv;type=text/csv" \
   -F "deleteAll=true"
-```
-
-### Sample curl — CSV + images
-```bash
-curl -v -X POST "https://api.example.com/api/external/uploadProducts" \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
-  -H "key: ENCRYPTED_COMPANY_KEY" \
-  -F "file=@/path/to/products.csv;type=text/csv" \
 ```
 
 ### Success response (200)
@@ -66,4 +61,4 @@ curl -v -X POST "https://api.example.com/api/external/uploadProducts" \
 ### Integration notes
 - Use streaming for large files and set adequate timeouts.
 - When images are submitted with the file, associate by exact filename.
-- Processing may be asynchronous — use `jobId` for tracking if provided.
+- Processing may be asynchronous

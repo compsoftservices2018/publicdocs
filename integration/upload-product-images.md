@@ -3,13 +3,13 @@ layout: default
 title: My Page Title
 ---
 
-### Upload Product Images
+## Upload Product Images
 
 ### Purpose
-Upload one or more product images when images are provided separately from the product file.
+Upload one or more product images when images are provided separately to **SmartShelf** online application.
 
 ### Endpoint
-- POST /api/external/uploadProductImages  
+- **POST** /api/external/uploadImages
 - Content-Type: multipart/form-data
 
 ### Authentication & headers
@@ -24,7 +24,7 @@ Upload one or more product images when images are provided separately from the p
 
 | Field | Required | Type | Description |
 |---|:---:|---|---|
-| images | Yes | file[] | Image files (JPEG/PNG) |
+| images | Yes | MultipartFile[] | Image files (JPEG) |
 
 ### Sample curl
 ```bash
@@ -40,16 +40,7 @@ curl -v -X POST "https://api.example.com/api/external/uploadProductImages" \
 {
   "status": 200,
   "data": [
-    "C:\\OnlineApp\\server\\html\\browser\\assets\\site-img\\10001\\banner-1.jpg",
-    "C:\\OnlineApp\\server\\html\\browser\\assets\\site-img\\10001\\banner-2.jpg",
-    "C:\\OnlineApp\\server\\html\\browser\\assets\\site-img\\10001\\banner-3.jpg",
-    "C:\\OnlineApp\\server\\html\\browser\\assets\\site-img\\10001\\default.jpg",
-    "C:\\OnlineApp\\server\\html\\browser\\assets\\site-img\\10001\\dummy.jpg",
-    "C:\\OnlineApp\\server\\html\\browser\\assets\\site-img\\10001\\dummy2.jpg",
-    "C:\\OnlineApp\\server\\html\\browser\\assets\\site-img\\10001\\dummy3.jpg",
-    "C:\\OnlineApp\\server\\html\\browser\\assets\\site-img\\10001\\home-page.jpg",
-    "C:\\OnlineApp\\server\\html\\browser\\assets\\site-img\\10001\\site-logo.jpg",
-    "C:\\OnlineApp\\server\\html\\browser\\assets\\site-img\\10001\\wall.jpg"
+    "Images uploaded successfully"
   ]
 }
 ```
@@ -63,5 +54,5 @@ curl -v -X POST "https://api.example.com/api/external/uploadProductImages" \
 | 500 | Storage error — retry with backoff |
 
 ### Integration tips
-- Prefer unique filenames (SKU prefix or UUID) to prevent collisions.
+- Use unique product name as filenames to prevent collisions.
 - Always verify server filename normalization before relying on exact names.

@@ -3,13 +3,13 @@ layout: default
 title: My Page Title
 ---
 
-### Upload Invoice PDFs
+## Upload Invoice PDFs
 
 ### Purpose
 Upload invoice PDF files to be stored under the configured invoice storage folder for a company.
 
 ### Endpoint
-- POST /api/orders/invoices  
+- POST /api/orders/sendInvoices  
 - Content-Type: multipart/form-data
 
 ### Authentication & headers
@@ -24,12 +24,7 @@ Upload invoice PDF files to be stored under the configured invoice storage folde
 
 | Field | Required | Type | Description |
 |---|:---:|---|---|
-| invoices | Yes | file[] | One or more PDF files |
-
-### Storage behavior
-- Base folder: `{app.storage.invoice}` (server configuration)  
-- Company folder: `{app.storage.invoice}/{companyCode}/`  
-- Filenames: server may prefix with UUID to avoid collisions. Response contains `originalName`, `storedName`, and `path`.
+| invoices | Yes | MultipartFile[] | One or more PDF files |
 
 ### Sample curl
 ```bash

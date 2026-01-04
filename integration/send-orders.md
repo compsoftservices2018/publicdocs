@@ -3,7 +3,7 @@ layout: default
 title: My Page Title
 ---
 
-### Send Orders
+## Send Orders
 
 ### Purpose
 Push new orders into RetailProcessor for processing and fulfillment.
@@ -220,7 +220,7 @@ curl -v -X POST "https://api.example.com/api/external/sendOrders" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "key: ENCRYPTED_COMPANY_KEY" \
   -H "Content-Type: application/json" \
-  -d @order.json
+  -d @orders.json
 ```
 
 ### Success response (200)
@@ -233,16 +233,10 @@ curl -v -X POST "https://api.example.com/api/external/sendOrders" \
 
 ### Errors
 
-<!-- blank line ensured before table -->
 | HTTP | Reason |
 |---:|---|
 | 400 | Validation errors — missing required fields |
 | 401 | Unauthorized |
 | 409 | Conflict — duplicate order/version mismatch |
 | 500 | Persistence error |
-<!-- blank line ensured after table -->
 
-### Integration notes
-- Server may derive `companyCode` from `key` when omitted.
-- Server ensures orderDetails receive `companyCode`, `orderNo` and `version` before persisting.
-- On validation failure, inspect returned error details and resubmit corrected payload.
