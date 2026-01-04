@@ -1,118 +1,116 @@
-# SmartShelf — Grocery App Documentation
+# SmartShelf — Grocery Platform Documentation
 
-Comprehensive documentation for the SmartShelf grocery application: storefront features, checkout flow, payment gateway integration, APIs, admin tools, and operational guidance for developers and integrators.
+A concise, professional reference for SmartShelf — an online grocery storefront and back-office platform. Includes product/catalog management, checkout and payments, fulfillment, admin tools, APIs, and integration guidance (including external billing systems).
 
-## Table of Contents
-
-- [Overview](#overview)
-- [User Journeys](#user-journeys)
-- [Catalog & Inventory](#catalog-inventory)
-- [Cart & Checkout](#cart-checkout)
-- [Payments & Gateway Integration](#payments)
-- [Orders & Fulfillment](#orders-fulfillment)
-- [Accounts & Profiles](#accounts)
-- [Admin & Reporting](#admin-reporting)
-- [API Summary](#api-summary)
-- [Security & Compliance](#security)
-- [Deployment & Testing](#deployment-testing)
-- [Integration Files](#integration-links)
-- [Getting Started — Quick Checklist](#getting-started)
+## Quick links
+- Overview
+- User flows
+- Catalog & inventory
+- Checkout & payments
+- External billing integration
+- APIs & webhooks
+- Admin & reporting
+- Security & deployment
+- Getting started (checklist)
 
 ## Overview
+SmartShelf provides a complete e-commerce solution for grocery retailers: customer storefront, real-time inventory, order management, payment processing, fulfillment, and administrative reporting. It is designed for high availability, extensibility, and secure integrations.
 
-SmartShelf is a full-featured grocery storefront offering browsing, search, cart, checkout, payment processing, order tracking, returns, and administrative tools. This document describes end-user flows, integration points for payments and third-party systems, and developer-facing APIs and webhooks.
+## Key capabilities (at a glance)
+- Browsing, faceted search, and product recommendations
+- Variant and bundle support (weights, packs, unit conversions)
+- Bulk catalog import (CSV/JSON) and image ingestion
+- Real-time inventory across locations and reservations during checkout
+- Multi-channel fulfillment (delivery, pickup, third-party couriers)
+- Promotions, loyalty, and discounts engine
+- Admin console, role-based access, and operational reports
+- Extensible API surface and webhook-driven events
 
-## User Journeys
+## User flows (condensed)
+- Browse → select product(s) → add to cart
+- Cart → apply coupons/loyalty → start checkout
+- Checkout → collect address & fulfillment → select payment → place order
+- Payment → gateway capture → order confirmed → fulfillment → tracking & delivery
+- Post-purchase → returns/refunds → reconciliation
 
-### Browse & Search
-Users navigate categories, use faceted search, sort results, and view product listings with availability and price. Search supports keyword, category, brand, and tag filters.
+Instrumented events: cart.add, cart.update, checkout.start, checkout.complete, payment.created, payment.succeeded, fulfillment.updated.
 
-### Product Details
-Each product page shows images, descriptions, nutrition info, price, inventory status, seller info, and recommended substitutions. Variants support weight, pack size, and unit conversions.
+## Catalog & inventory
+- Hierarchical categories, tags, and attributes
+- Import: CSV/JSON templates (see Integration Files)
+- Images: multipart/form-data uploads; naming and size constraints
+- Inventory model: available, reserved, committed; per-location stock and lead times
 
-### Cart
-Users add/edit/remove items, change quantities, view line-item pricing, promotions, subtotals, taxes, and shipping estimates. Cart persists for authenticated users and optionally via cookie/session for guests.
+## Checkout & payments
+- Tokenized card payments, digital wallets, saved payment tokens
+- Optional server-side capture or delayed capture flows
+- Order validation and inventory reservation prior to capture
+- Webhook handling for asynchronous payment events and retries
 
-### Checkout
-Checkout collects shipping address, delivery/pickup options, payment method, and order confirmation. Checkout validates inventory in real-time and reserves stock during payment processing.
+## External billing system (integration)
+Purpose: sync invoices, customer billing profiles, and recurring charges with a dedicated billing/accounting system.
 
-## Catalog & Inventory
+Integration patterns:
+- Outbound (to billing):
+  - On order completion, generate an invoice payload (order lines, taxes, discounts, customer billing reference) and POST to billing API.
+  - For recurring subscriptions, create customer and subscription objects in billing system; store returned customer_id for reconciliation.
+- Inbound (from billing):
+  - Process billing webhooks for invoice paid, invoice failed, credit note created; map status to orders/refunds.
+  - Reconcile payments and tax records nightly via a scheduled job using billing API exports.
+- Data mapping:
+  - Maintain canonical IDs: order_id ↔ invoice_reference, customer_id ↔ billing_customer_id.
+  - Include metadata (store/location, POS reference) for auditing.
+- Security & reliability:
+  - Use mutual TLS or signed requests; rotate integration keys.
+  - Implement idempotency keys for invoice creation; retry with dead-lettering for failures.
 
-Key catalog capabilities:
+Recommended endpoints and headers:
+- Secure POST /billing/invoices with Authorization: Bearer <token>
+- Webhook endpoint: /webhooks/billing (validate signature, respond 2xx)
 
-- Hierarchical categories and tags
-- Bulk product import (CSV/JSON) and image uploads
-- Inventory tracking with available/reserved/committed quantities
-- Per-location stock and fulfillment lead times
+Integration notes:
+- Use a staging billing account for end-to-end tests.
+- Keep tax calculations consistent between systems or mark reconciled adjustments.
 
-## Cart & Checkout Details
+## APIs & webhooks (summary)
+- Product APIs: GET/POST /products, bulk import endpoints
+- Media: POST /products/{id}/images (multipart)
+- Orders: GET /orders, POST /orders, order status transitions
+- Payments: endpoints to create payment intents, confirm captures
+- Webhooks: /webhooks/payments, /webhooks/billing, /webhooks/orders
+- Authentication: API key or OAuth2 bearer tokens; admin operations require elevated scopes
 
-Checkout flow summary:
+See Integration Files for templates, CSVs, and OpenAPI exports.
 
-1. Review cart → apply coupons / loyalty
-2. Collect address & choose fulfillment method (delivery/pickup)
-3. Calculate shipping, taxes, and final total
-4. Select payment method and submit payment
-5. Receive order confirmation and tracking
+## Admin & reporting
+- Role-based access control for staff and integrations
+- Order management: pick/pack, partial shipments, cancellations
+- Financial reports: sales, refunds, tax summaries, payment reconciliations
+- Audit logs for critical operations (price changes, inventory adjustments)
 
-Instrumented events: `cart.add`, `cart.update`, `checkout.start`, `checkout.complete`, `payment.success`, `payment.failed`.
+## Security & compliance
+- TLS everywhere; secure cookies (HttpOnly, Secure, SameSite)
+- PCI scope reduction via tokenization; never store raw PAN
+- Webhook signature verification and secret rotation
+- Rate limits, WAF, and monitoring for anomalies
+- Data retention and privacy controls per jurisdiction
 
-## Payments & Gateway Integration
+## Deployment & testing
+- Recommended environments: dev, staging, prod with separate credentials
+- CI/CD with schema migrations, contract tests for APIs and webhooks
+- Test scenarios: payment declines, webhook retries, inventory race conditions
+- Monitoring: latency, error rates, order throughput, payment failure rates
 
-### Supported Flows
-- Card payments (tokenization + server-side capture)
-- Digital wallets (Apple Pay / Google Pay) via gateway
-- Saved cards and PCI‑scope reduction via client-side tokenization
-- Alternative methods (ACH, BNPL) where supported by the gateway
+## Getting started — Quick checklist
+1. Clone repository and read Integration Files.
+2. Provision database and run migrations.
+3. Configure payment gateway sandbox + webhook endpoint.
+4. Configure billing integration (API keys, webhook URL).
+5. Import product catalog (use provided CSV template) and upload images.
+6. Run end-to-end test order: place, pay (sandbox), fulfill, reconcile.
 
-### Integration Pattern (recommended)
-1. Client obtains ephemeral payment token via gateway SDK.
-2. Client sends token + order details to your server.
-3. Server validates order, reserves inventory, calls gateway capture API.
-4. On gateway webhook success, mark order paid and finalize fulfillment.
+## Integration Files
+- CSV templates, OpenAPI spec, sample payloads and webhook examples are in the Integration Files folder.
 
-
-### Security & Compliance
-- Never store raw card data; use gateway tokens or vault.
-- Use HTTPS and HSTS for all endpoints.
-- Sign and verify webhooks; rotate secrets periodically.
-- Follow PCI DSS guidance; prefer hosted fields or gateway SDKs.
-
-## Orders & Fulfillment
-
-Order lifecycle: NEW → PROCESSING → PICKED → SHIPPED/OUT_FOR_DELIVERY → DELIVERED → RETURNED/REFUNDED. Support partial shipments, tracking numbers, cancellations and refunds with reconciliation against payment gateway records.
-
-## Accounts & Profiles
-
-Features: registration/login (email/password, OAuth), address book, saved payments (tokens), order history, loyalty points, notification preferences.
-
-## Admin & Reporting
-
-Admin capabilities include product management, inventory adjustments, order management, returns processing, reports (sales, refunds, inventory turnover), and staff permissions/roles.
-
-
-## Security & Compliance
-
-- Enforce strong authentication and RBAC for admin endpoints.
-- Use TLS everywhere and secure cookies (HttpOnly, Secure, SameSite).
-- Rate-limit public APIs and implement WAF rules for common attacks.
-- Log security events and monitor fraud patterns (velocity, mismatched IP & billing address).
-
-## Deployment & Testing
-
-Recommendations:
-
-- Use separate environments (dev, staging, prod) and test payment flows with sandbox credentials.
-- Automate integration and contract tests for APIs and webhooks.
-- Test failure modes: payment declines, webhook retries, inventory race conditions.
-- Monitor metrics: order rate, cart abandonment, payment failures, latency.
-
-## Getting Started — Quick Checklist
-
-1. Clone the repository and open this documentation.
-2. Set up the database and apply initial schema (see Installation docs).
-3. Configure payment gateway sandbox credentials and webhook endpoint.
-4. Import product catalog and verify inventory counts.
-5. Run an end-to-end test order through checkout and verify fulfillment.
-
----
+## Contact & support
+For integration access, API keys, billing onboarding, or production incidents contact the platform administrator.
