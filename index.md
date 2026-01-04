@@ -1,3 +1,15 @@
+<!-- compact hero: logo + title + tagline -->
+<div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+  <img src="{{ '/assets/images/logo.svg' | relative_url }}" alt="SmartShelf logo" style="height:56px;max-height:56px" />
+  <div>
+    <h1 style="margin:0;font-size:1.25rem">SmartShelf — Grocery Platform Documentation</h1>
+    <p style="margin:6px 0 0;color:#586069">A concise, professional reference for SmartShelf — online grocery storefront, back-office tools, and integrations.</p>
+  </div>
+</div>
+
+<!-- slightly reduce overall body size for a more compact layout -->
+<div style="font-size:0.95rem;line-height:1.5">
+
 # SmartShelf — Grocery Platform Documentation
 
 A concise, professional reference for SmartShelf — an online grocery storefront and back-office platform. Includes product/catalog management, checkout and payments, fulfillment, admin tools, APIs, and integration guidance (including external billing systems).
@@ -114,3 +126,5 @@ See Integration Files for templates, CSVs, and OpenAPI exports.
 
 ## Contact & support
 For integration access, API keys, billing onboarding, or production incidents contact the platform administrator.
+
+</div>
