@@ -1,4 +1,3 @@
-
 # SmartShelf API Documentation (Third‑Party Integration)
 
 This document contains integration guides for the public APIs exposed by **SmartShelf**  online application. Each document includes endpoint details, required headers, sample requests (curl), example responses, and integration notes.
@@ -7,7 +6,10 @@ This document contains integration guides for the public APIs exposed by **Smart
 
 Below is a high-level sequence diagram that shows authentication and how a third‑party system interacts with Smartshelf online application endpoints.
 
-![sequence-diagram.png](sequence-diagram.png)
+<!-- Use a responsive image so the diagram fits the page -->
+<div style="max-width:100%;overflow:hidden;text-align:center;">
+  <img src="sequence-diagram.png" alt="sequence diagram" style="max-width:100%;height:auto;display:inline-block;" />
+</div>
 
 ## APIs
 
