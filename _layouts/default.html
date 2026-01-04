@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
   </head>
   <body>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+  </script>
     <header class="site-header">
       <div class="container">
         <div class="brand">
