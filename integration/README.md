@@ -1,8 +1,3 @@
----
-layout: default
-title: "My Diagram Page"
-mermaid: true
----
 
 # SmartShelf API Documentation (Third‑Party Integration)
 
@@ -12,38 +7,7 @@ This document contains integration guides for the public APIs exposed by **Smart
 
 Below is a high-level sequence diagram that shows authentication and how a third‑party system interacts with Smartshelf online application endpoints.
 
-```mermaid
-sequenceDiagram
-    participant OnlineAppDB as SmartShelf Database
-    participant OnlineAppStorage as SmartShelf Storage
-    participant OnlineApp as SmartShelf App
-    participant Billing as Billing
-    participant BillingDB as Billing Database
-
-
-    Billing->>OnlineApp: Call /uploadProducts
-    OnlineApp->>OnlineAppDB: Updates products to online app
-    Billing->>OnlineApp: Call /uploadProductImages
-    OnlineApp->>OnlineAppDB: Updates products images to online app
-    Billing->>OnlineApp: Call /receiveOrders
-    Billing->>Billing: Update order process
-    Billing->>BillingDB: Updates submitted orders to billing
-    Billing->>OnlineApp: Call /sendOrders with status "Processing"
-    OnlineApp->>OnlineAppDB: Updates order status to "Processing"
-    Billing->>Billing: Process order routine & create invoices
-    Billing->>BillingDB: Updates order status to "Processed"
-    Billing->>OnlineApp: Call /sendOrders with status "Processed"
-    OnlineApp->>OnlineAppDB: Updates order status to "Processed"
-    Billing->>OnlineApp: Call /sendInvoices
-    OnlineApp->>OnlineAppStorage: Uploads invoices to Smartsheld app
-    Billing->>BillingDB: Updates order status to any subsequent statuses
-    Billing->>OnlineApp: Call /sendOrders with any subsequent statuses
-    OnlineApp->>OnlineAppDB: Updates order status marked status
-
-
-
-```
-
+![sequence-diagram.png](sequence-diagram.png)
 
 ## APIs
 
