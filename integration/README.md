@@ -1,3 +1,9 @@
+---
+layout: default
+title: My Page Title
+---
+
+
 # SmartShelf API Documentation (Third‑Party Integration)
 
 This document contains integration guides for the public APIs exposed by **SmartShelf**  online application. Each document includes endpoint details, required headers, sample requests (curl), example responses, and integration notes.
